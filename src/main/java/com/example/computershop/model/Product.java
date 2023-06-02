@@ -72,4 +72,8 @@ public abstract class Product {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+
+    public void increase(int quantity) {
+        this.quantity += quantity;
+    }
 }
