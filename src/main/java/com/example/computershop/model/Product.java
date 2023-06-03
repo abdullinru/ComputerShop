@@ -3,10 +3,10 @@ package com.example.computershop.model;
 import java.util.Objects;
 
 public abstract class Product {
-    protected int serNomer;
-    protected String manufacturer;
-    protected double price;
-    protected int quantity;
+     int serNomer;
+     String manufacturer;
+     double price;
+     int quantity;
 
     public Product() {
 

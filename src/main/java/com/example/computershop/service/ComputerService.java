@@ -1,6 +1,7 @@
 package com.example.computershop.service;
 
 import com.example.computershop.exception.ComputerNotFoundException;
+import com.example.computershop.exception.ProductNotFoundException;
 import com.example.computershop.model.Computer;
 import com.example.computershop.repository.ComputerRepository;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class ComputerService {
 
     public Computer editComputer(Integer id, Computer newComputer) {
         Computer editComputer = computerRepository.findById(id)
-                .orElseThrow(ComputerNotFoundException::new);
+                .orElseThrow(ProductNotFoundException::new);
         editComputer.setSerNomer(newComputer.getSerNomer());
         editComputer.setManufacturer(newComputer.getManufacturer());
         editComputer.setPrice(newComputer.getPrice());
@@ -35,7 +36,7 @@ public class ComputerService {
 
     public Computer getComputerById(Integer id) {
         Optional<Computer> findComputer = computerRepository.findById(id);
-        return findComputer.orElseThrow(ComputerNotFoundException::new);
+        return findComputer.orElseThrow(ProductNotFoundException::new);
     }
 
     public Computer addComputer(Computer newСomputer) {

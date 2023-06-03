@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ComputerRepository extends JpaRepository<Computer, Integer> {
-//    Optional<Computer> findComputerById(Integer id);
 
 }

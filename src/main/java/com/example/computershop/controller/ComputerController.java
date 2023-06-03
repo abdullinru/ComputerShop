@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "computer")
+@RequestMapping("/computer")
 public class ComputerController {
 
     private ComputerService computerService;
