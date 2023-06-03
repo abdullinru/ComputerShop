@@ -13,8 +13,8 @@ public class MyExceptionHandler {
     public ResponseEntity<String> handlerException (IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(String.format("Error: %s", e.getMessage()));
     }
-    @ExceptionHandler(ComputerNotFoundException.class)
-    public ResponseEntity<String> handlerException (ComputerNotFoundException e) {
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<String> handlerException (ProductNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Error: %s", e.getMessage()));
     }
     @ExceptionHandler(HttpMessageNotReadableException.class)
