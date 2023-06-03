@@ -29,8 +29,8 @@ public class ComputerController {
         return ResponseEntity.ok(result);
     }
     @PostMapping
-    public ResponseEntity<Computer> addComputer(@RequestBody Computer newСomputer) {
-        Computer result = computerService.addComputer(newСomputer);
+    public ResponseEntity<Computer> addComputer(@RequestBody Computer newComputer) {
+        Computer result = computerService.addComputer(newComputer);
         return ResponseEntity.ok(result);
     }
 

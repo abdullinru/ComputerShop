@@ -18,6 +18,9 @@ public class ComputerService {
     }
 
     public Computer editComputer(Integer id, Computer newComputer) {
+        if (newComputer == null) {
+            throw new IllegalArgumentException("Parametr newСomputer is null");
+        }
         Computer editComputer = computerRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
         editComputer.setSerNomer(newComputer.getSerNomer());
@@ -38,17 +41,17 @@ public class ComputerService {
         return findComputer.orElseThrow(ProductNotFoundException::new);
     }
 
-    public Computer addComputer(Computer newСomputer) {
-        if (newСomputer == null) {
+    public Computer addComputer(Computer newComputer) {
+        if (newComputer == null) {
             throw new IllegalArgumentException("Parametr newСomputer is null");
         }
         for (int i = 0; i < getAllComputers().size(); i++) {
             Computer currentComputer = getAllComputers().get(i);
-            if (currentComputer.equals(newСomputer)) {
-                currentComputer.increase(newСomputer.getQuantity());
+            if (currentComputer.equals(newComputer)) {
+                currentComputer.increase(newComputer.getQuantity());
                 return computerRepository.save(currentComputer);
             }
         }
-        return computerRepository.save(newСomputer);
+        return computerRepository.save(newComputer);
     }
 }
