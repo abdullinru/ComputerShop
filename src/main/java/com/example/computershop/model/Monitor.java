@@ -115,4 +115,8 @@ public class Monitor{
                 ", diagonal=" + diagonal +
                 '}';
     }
+
+    public void increase(int quantity) {
+        this.quantity += quantity;
+    }
 }

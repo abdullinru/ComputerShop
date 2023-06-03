@@ -115,4 +115,8 @@ public class Notebook{
                 ", size=" + size +
                 '}';
     }
+
+    public void increase(int quantity) {
+        this.quantity += quantity;
+    }
 }

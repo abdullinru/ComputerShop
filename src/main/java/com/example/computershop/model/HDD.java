@@ -116,4 +116,8 @@ public class HDD{
                 ", storage=" + storage +
                 '}';
     }
+
+    public void increase(int quantity) {
+        this.quantity += quantity;
+    }
 }
