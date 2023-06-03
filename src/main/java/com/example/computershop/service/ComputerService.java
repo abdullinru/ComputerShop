@@ -1,6 +1,5 @@
 package com.example.computershop.service;
 
-import com.example.computershop.exception.ComputerNotFoundException;
 import com.example.computershop.exception.ProductNotFoundException;
 import com.example.computershop.model.Computer;
 import com.example.computershop.repository.ComputerRepository;
