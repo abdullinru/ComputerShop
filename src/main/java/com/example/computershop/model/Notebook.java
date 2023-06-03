@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity(name = "notebooks")
-public class Notebook{
+public class Notebook extends Product{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,9 +18,7 @@ public class Notebook{
     private NotebookSize size;
 
     public Notebook() {
-
     }
-
     public Notebook(Integer id, int serNomer, String manufacturer, double price, int quantity, NotebookSize size) {
         this.id = id;
         this.serNomer = serNomer;
