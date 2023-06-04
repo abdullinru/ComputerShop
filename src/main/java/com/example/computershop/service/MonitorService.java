@@ -1,6 +1,7 @@
 package com.example.computershop.service;
 
 import com.example.computershop.exception.ProductNotFoundException;
+import com.example.computershop.model.Computer;
 import com.example.computershop.model.HDD;
 import com.example.computershop.model.Monitor;
 import com.example.computershop.repository.MonitorRepository;
@@ -29,14 +30,17 @@ public class MonitorService {
         if (newMonitor == null) {
             throw new IllegalArgumentException("Parametr newMonitor is null");
         }
-        for (int i = 0; i < getAllMonitor().size(); i++) {
-            Monitor currentMonitor = getAllMonitor().get(i);
-            if (currentMonitor.equals(newMonitor)) {
-                currentMonitor.increase(newMonitor.getQuantity());
-                return monitorRepository.save(currentMonitor);
-            }
+        // проверяем, есть ли уже такой монитор.
+        // Если нет - то добавляем новый монитор в БД.
+        // Если есть - то добавляем найденному монитору количество его экземпляров(quantity)
+        List<Monitor> monitors = getAllMonitor();
+        int index = monitors.indexOf(newMonitor);
+        if (index == -1) {
+            return monitorRepository.save(newMonitor);
         }
-        return monitorRepository.save(newMonitor);
+        Monitor monitorByIndex = monitors.get(index);
+        monitorByIndex.increase(newMonitor.getQuantity());
+        return monitorRepository.save(monitorByIndex);
     }
 
     public Monitor editMonitor(Integer id, Monitor newMonitor) {

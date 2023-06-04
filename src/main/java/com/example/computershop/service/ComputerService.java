@@ -45,13 +45,16 @@ public class ComputerService {
         if (newComputer == null) {
             throw new IllegalArgumentException("Parametr newСomputer is null");
         }
-        for (int i = 0; i < getAllComputers().size(); i++) {
-            Computer currentComputer = getAllComputers().get(i);
-            if (currentComputer.equals(newComputer)) {
-                currentComputer.increase(newComputer.getQuantity());
-                return computerRepository.save(currentComputer);
-            }
+        // проверяем, есть ли уже такой компьютер.
+        // Если нет - то добавляем новый компьютер в БД.
+        // Если есть - то добавляем найденному компьютеру количество его экземпляров(quantity)
+        List<Computer> comps = getAllComputers();
+        int index = comps.indexOf(newComputer);
+        if (index == -1) {
+            return computerRepository.save(newComputer);
         }
-        return computerRepository.save(newComputer);
+        Computer computerByIndex = comps.get(index);
+        computerByIndex.increase(newComputer.getQuantity());
+        return computerRepository.save(computerByIndex);
     }
 }

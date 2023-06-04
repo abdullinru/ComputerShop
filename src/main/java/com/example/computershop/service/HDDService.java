@@ -29,14 +29,17 @@ public class HDDService {
         if (newHDD == null) {
             throw new IllegalArgumentException("Parametr newHDD is null");
         }
-        for (int i = 0; i < getAllHDD().size(); i++) {
-            HDD currentHDD = getAllHDD().get(i);
-            if (currentHDD.equals(newHDD)) {
-                currentHDD.increase(newHDD.getQuantity());
-                return hddRepository.save(currentHDD);
-            }
+        // проверяем, есть ли уже такой HDD.
+        // Если нет - то добавляем новый HDD в БД.
+        // Если есть - то добавляем найденному HDD количество его экземпляров(quantity)
+        List<HDD> hdds = getAllHDD();
+        int index = hdds.indexOf(newHDD);
+        if (index == -1) {
+            return hddRepository.save(newHDD);
         }
-        return hddRepository.save(newHDD);
+        HDD hddByIndex = hdds.get(index);
+        hddByIndex.increase(newHDD.getQuantity());
+        return hddRepository.save(hddByIndex);
     }
 
     public HDD editHDD(Integer id, HDD newHDD) {

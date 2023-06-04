@@ -1,6 +1,7 @@
 package com.example.computershop.service;
 
 import com.example.computershop.exception.ProductNotFoundException;
+import com.example.computershop.model.Computer;
 import com.example.computershop.model.Notebook;
 import com.example.computershop.repository.NotebookRepository;
 import org.springframework.stereotype.Service;
@@ -28,14 +29,17 @@ public class NotebookService {
         if (newNotebook == null) {
             throw new IllegalArgumentException("Parametr newNotebook is null");
         }
-        for (int i = 0; i < getAllNotebook().size(); i++) {
-            Notebook currentNotebook = getAllNotebook().get(i);
-            if (currentNotebook.equals(newNotebook)) {
-                currentNotebook.increase(newNotebook.getQuantity());
-                return notebookRepository.save(currentNotebook);
-            }
+        // проверяем, есть ли уже такой ноутбук.
+        // Если нет - то добавляем новый ноутбук в БД.
+        // Если есть - то добавляем найденному ноутбуку количество его экземпляров(quantity)
+        List<Notebook> notebooks = getAllNotebook();
+        int index = notebooks.indexOf(newNotebook);
+        if (index == -1) {
+            return notebookRepository.save(newNotebook);
         }
-        return notebookRepository.save(newNotebook);
+        Notebook notebookByIndex = notebooks.get(index);
+        notebookByIndex.increase(newNotebook.getQuantity());
+        return notebookRepository.save(notebookByIndex);
     }
 
     public Notebook editNotebook(Integer id, Notebook newNotebook) {
