@@ -22,7 +22,7 @@ public class ComputerService implements ProductService{
         this.computerRepository = computerRepository;
     }
 
-//    @CachePut(value = "computers", key = "id")
+    @CachePut(value = "computers", key = "#id")
     public Computer edit(Integer id, Product newProduct) {
         if (newProduct == null) {
             log.error("Переданный параметр - NULL");
@@ -47,7 +47,7 @@ public class ComputerService implements ProductService{
         return computerRepository.findAll();
     }
 
-//    @Cacheable("computers")
+    @Cacheable("computers")
     public Computer getById(Integer id) {
         log.info("Получение компьютера с  id {}", id);
         Optional<Computer> findComputer = computerRepository.findById(id);

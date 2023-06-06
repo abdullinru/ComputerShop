@@ -6,6 +6,8 @@ import com.example.computershop.model.Notebook;
 import com.example.computershop.model.Product;
 import com.example.computershop.repository.NotebookRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class NotebookService implements ProductService{
         log.info("Получение списка всех ноутбуков ");
         return notebookRepository.findAll();
     }
+    @Cacheable("notebooks")
     public Notebook getById(Integer id) {
         log.info("Получение ноутбука с  id {}", id);
         Optional<Notebook> findNotebook = notebookRepository.findById(id);
@@ -50,6 +53,7 @@ public class NotebookService implements ProductService{
         return notebookRepository.save(notebookByIndex);
     }
 
+    @CachePut(value = "notebooks", key = "#id")
     public Notebook edit(Integer id, Product newProduct) {
         if (newProduct == null) {
             log.error("Переданный параметр - NULL");

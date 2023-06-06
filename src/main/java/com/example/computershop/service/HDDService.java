@@ -6,6 +6,8 @@ import com.example.computershop.model.HDD;
 import com.example.computershop.model.Product;
 import com.example.computershop.repository.HDDRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +26,7 @@ public class HDDService implements ProductService {
         log.info("Получение списка всех HDD ");
         return hddRepository.findAll();
     }
+    @Cacheable("hdds")
     public HDD getById(Integer id) {
         log.info("Получение HDD с  id {}", id);
         Optional<HDD> findHDD = hddRepository.findById(id);
@@ -50,6 +53,7 @@ public class HDDService implements ProductService {
         return hddRepository.save(hddByIndex);
     }
 
+    @CachePut(value = "hdds", key = "#id")
     public HDD edit(Integer id, Product newProduct) {
         if (newProduct == null) {
             log.error("Переданный параметр - NULL");

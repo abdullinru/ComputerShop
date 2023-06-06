@@ -7,6 +7,8 @@ import com.example.computershop.model.Monitor;
 import com.example.computershop.model.Product;
 import com.example.computershop.repository.MonitorRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +27,7 @@ public class MonitorService implements ProductService{
         log.info("Получение списка всех мониторов");
         return monitorRepository.findAll();
     }
+    @Cacheable("monitors")
     public Monitor getById(Integer id) {
         log.info("Получение монитора с  id {}", id);
         Optional<Monitor> findMonitor = monitorRepository.findById(id);
@@ -51,6 +54,7 @@ public class MonitorService implements ProductService{
         return monitorRepository.save(monitorByIndex);
     }
 
+    @CachePut(value = "monitors", key = "#id")
     public Monitor edit(Integer id, Product newProduct) {
         if (newProduct == null) {
             log.error("Переданный параметр - NULL");
