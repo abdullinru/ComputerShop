@@ -4,9 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Objects;
 
+@Data
+@NoArgsConstructor
+@ToString
 @Entity(name = "hdd")
 public class HDD extends Product{
 
@@ -14,16 +20,6 @@ public class HDD extends Product{
 
     public HDD(Integer id, int serNomer, String manufacturer, double price, int quantity, int storage) {
         super(id, serNomer, manufacturer, price, quantity);
-        this.storage = storage;
-    }
-    public HDD() {
-    }
-
-    public int getStorage() {
-        return storage;
-    }
-
-    public void setStorage(int storage) {
         this.storage = storage;
     }
 
@@ -50,17 +46,5 @@ public class HDD extends Product{
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + storage;
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "HDD{" +
-                "id=" + id +
-                ", serNomer=" + serNomer +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", storage=" + storage +
-                '}';
     }
 }

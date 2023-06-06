@@ -1,31 +1,25 @@
 package com.example.computershop.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Objects;
 
+@Data
+@NoArgsConstructor
+@ToString
 @Entity(name = "computers" )
 public class Computer extends Product{
 
     @Enumerated(value = EnumType.STRING)
     private FormFactor type;
 
-    public Computer() {
-    }
-
     public Computer(Integer id, int serNomer, String manufacturer, double price, int quantity, FormFactor type) {
         super(id, serNomer, manufacturer, price, quantity);
         this.type = type;
     }
-
-    public FormFactor getType() {
-        return type;
-    }
-
-    public void setType(FormFactor type) {
-        this.type = type;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,17 +44,5 @@ public class Computer extends Product{
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Computer{" +
-                "id=" + id +
-                ", serNomer=" + serNomer +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", type=" + type +
-                '}';
     }
 }

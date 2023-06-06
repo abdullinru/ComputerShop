@@ -1,27 +1,22 @@
 package com.example.computershop.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Objects;
 
+@Data
+@NoArgsConstructor
+@ToString
 @Entity(name = "notebooks")
 public class Notebook extends Product{
     @Enumerated(value = EnumType.STRING)
     private NotebookSize size;
 
-    public Notebook() {
-    }
-
     public Notebook(Integer id, int serNomer, String manufacturer, double price, int quantity, NotebookSize size) {
         super(id, serNomer, manufacturer, price, quantity);
-        this.size = size;
-    }
-
-    public NotebookSize getSize() {
-        return size;
-    }
-
-    public void setSize(NotebookSize size) {
         this.size = size;
     }
 
@@ -49,17 +44,5 @@ public class Notebook extends Product{
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (size != null ? size.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Notebook{" +
-                "id=" + id +
-                ", serNomer=" + serNomer +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", size=" + size +
-                '}';
     }
 }
