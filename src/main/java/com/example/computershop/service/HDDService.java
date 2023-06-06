@@ -3,6 +3,7 @@ package com.example.computershop.service;
 import com.example.computershop.exception.ProductNotFoundException;
 import com.example.computershop.model.Computer;
 import com.example.computershop.model.HDD;
+import com.example.computershop.model.Product;
 import com.example.computershop.repository.HDDRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,47 +11,49 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class HDDService {
+public class HDDService implements ProductService {
     private HDDRepository hddRepository;
 
     public HDDService(HDDRepository hddRepository) {
         this.hddRepository = hddRepository;
     }
 
-    public List<HDD> getAllHDD() {
+    public List getAll() {
         return hddRepository.findAll();
     }
-    public HDD getHDDById(Integer id) {
+    public HDD getById(Integer id) {
         Optional<HDD> findHDD = hddRepository.findById(id);
         return findHDD.orElseThrow(ProductNotFoundException::new);
     }
 
-    public HDD addHDD(HDD newHDD) {
-        if (newHDD == null) {
+    public HDD add(Product newProduct) {
+        HDD newHdd = (HDD) newProduct;
+        if (newHdd == null) {
             throw new IllegalArgumentException("Parametr newHDD is null");
         }
         // проверяем, есть ли уже такой HDD.
         // Если нет - то добавляем новый HDD в БД.
         // Если есть - то добавляем найденному HDD количество его экземпляров(quantity)
-        List<HDD> hdds = getAllHDD();
-        int index = hdds.indexOf(newHDD);
+        List<HDD> hdds = getAll();
+        int index = hdds.indexOf(newHdd);
         if (index == -1) {
-            return hddRepository.save(newHDD);
+            return hddRepository.save(newHdd);
         }
         HDD hddByIndex = hdds.get(index);
-        hddByIndex.increase(newHDD.getQuantity());
+        hddByIndex.increase(newHdd.getQuantity());
         return hddRepository.save(hddByIndex);
     }
 
-    public HDD editHDD(Integer id, HDD newHDD) {
+    public HDD edit(Integer id, Product newProduct) {
+        HDD newHdd = (HDD) newProduct;
         HDD editHDD = hddRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
-        editHDD.setSerNomer(newHDD.getSerNomer());
-        editHDD.setManufacturer(newHDD.getManufacturer());
-        editHDD.setPrice(newHDD.getPrice());
-        editHDD.setQuantity(newHDD.getQuantity());
+        editHDD.setSerNomer(newHdd.getSerNomer());
+        editHDD.setManufacturer(newHdd.getManufacturer());
+        editHDD.setPrice(newHdd.getPrice());
+        editHDD.setQuantity(newHdd.getQuantity());
 
-        editHDD.setStorage(newHDD.getStorage());
+        editHDD.setStorage(newHdd.getStorage());
 
         return hddRepository.save(editHDD);
     }

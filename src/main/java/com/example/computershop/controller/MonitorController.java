@@ -2,12 +2,15 @@ package com.example.computershop.controller;
 
 import com.example.computershop.model.HDD;
 import com.example.computershop.model.Monitor;
+import com.example.computershop.model.Product;
 import com.example.computershop.service.MonitorService;
+import com.example.computershop.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +20,10 @@ import java.util.List;
 @RequestMapping("monitor")
 public class MonitorController {
 
-    private MonitorService monitorService;
+    private ProductService productService;
 
-    public MonitorController(MonitorService monitorService) {
-        this.monitorService = monitorService;
+    public MonitorController(@Qualifier("monitorService") ProductService productService) {
+        this.productService = productService;
     }
 
     @Operation(summary = "Вывести список всех мониторов",
@@ -31,8 +34,8 @@ public class MonitorController {
                             schema = @Schema(implementation = Monitor.class))),
             @ApiResponse(responseCode = "500", description = "error on server")})
     @GetMapping
-    public ResponseEntity<List<Monitor>> getAllMonitor() {
-        List<Monitor> result = monitorService.getAllMonitor();
+    public ResponseEntity<List<Product>> getAllMonitor() {
+        List<Product> result = productService.getAll();
         return ResponseEntity.ok(result);
     }
 
@@ -47,7 +50,7 @@ public class MonitorController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @GetMapping("/{id}")
     public ResponseEntity<Monitor> getMonitorById(@PathVariable Integer id) {
-        Monitor result = monitorService.getMonitorById(id);
+        Monitor result = (Monitor) productService.getById(id);
         return ResponseEntity.ok(result);
     }
 
@@ -61,7 +64,7 @@ public class MonitorController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PostMapping
     public ResponseEntity<Monitor> addMonitor(@RequestBody Monitor newMonitor) {
-        Monitor result = monitorService.addMonitor(newMonitor);
+        Monitor result = (Monitor) productService.add(newMonitor);
         return ResponseEntity.ok(result);
     }
 
@@ -76,7 +79,7 @@ public class MonitorController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PutMapping("/{id}")
     public ResponseEntity<Monitor> editMonitor(@PathVariable Integer id, @RequestBody Monitor newMonitor) {
-        Monitor result = monitorService.editMonitor(id, newMonitor);
+        Monitor result = (Monitor) productService.edit(id, newMonitor);
         return ResponseEntity.ok(result);
     }
 }

@@ -2,6 +2,7 @@ package com.example.computershop.service;
 
 import com.example.computershop.exception.ProductNotFoundException;
 import com.example.computershop.model.Computer;
+import com.example.computershop.model.Product;
 import com.example.computershop.repository.ComputerRepository;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ComputerService {
+public class ComputerService implements ProductService{
 
     private ComputerRepository computerRepository;
 
@@ -17,44 +18,47 @@ public class ComputerService {
         this.computerRepository = computerRepository;
     }
 
-    public Computer editComputer(Integer id, Computer newComputer) {
-        if (newComputer == null) {
+    public Computer edit(Integer id, Product newProduct) {
+        Computer newComp = (Computer)newProduct;
+        if (newComp == null) {
             throw new IllegalArgumentException("Parametr newСomputer is null");
         }
         Computer editComputer = computerRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
-        editComputer.setSerNomer(newComputer.getSerNomer());
-        editComputer.setManufacturer(newComputer.getManufacturer());
-        editComputer.setPrice(newComputer.getPrice());
-        editComputer.setQuantity(newComputer.getQuantity());
-        editComputer.setType(newComputer.getType());
+        editComputer.setSerNomer(newComp.getSerNomer());
+        editComputer.setManufacturer(newComp.getManufacturer());
+        editComputer.setPrice(newComp.getPrice());
+        editComputer.setQuantity(newComp.getQuantity());
+        editComputer.setType(newComp.getType());
 
         return computerRepository.save(editComputer);
     }
 
-    public List<Computer> getAllComputers() {
+    public List getAll() {
         return computerRepository.findAll();
     }
 
-    public Computer getComputerById(Integer id) {
+    public Computer getById(Integer id) {
         Optional<Computer> findComputer = computerRepository.findById(id);
         return findComputer.orElseThrow(ProductNotFoundException::new);
     }
 
-    public Computer addComputer(Computer newComputer) {
-        if (newComputer == null) {
+    public Computer add(Product newProduct) {
+        Computer newComp = (Computer) newProduct;
+        if (newComp == null) {
             throw new IllegalArgumentException("Parametr newСomputer is null");
         }
         // проверяем, есть ли уже такой компьютер.
         // Если нет - то добавляем новый компьютер в БД.
         // Если есть - то добавляем найденному компьютеру количество его экземпляров(quantity)
-        List<Computer> comps = getAllComputers();
-        int index = comps.indexOf(newComputer);
+        List<Computer> comps = getAll();
+        int index = comps.indexOf(newComp);
         if (index == -1) {
-            return computerRepository.save(newComputer);
+            return computerRepository.save(newComp);
         }
         Computer computerByIndex = comps.get(index);
-        computerByIndex.increase(newComputer.getQuantity());
+        computerByIndex.increase(newComp.getQuantity());
         return computerRepository.save(computerByIndex);
     }
+
 }

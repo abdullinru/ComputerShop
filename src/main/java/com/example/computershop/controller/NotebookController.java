@@ -1,12 +1,15 @@
 package com.example.computershop.controller;
 
 import com.example.computershop.model.Notebook;
+import com.example.computershop.model.Product;
 import com.example.computershop.service.NotebookService;
+import com.example.computershop.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +19,10 @@ import java.util.List;
 @RequestMapping("/notebook")
 public class NotebookController {
 
-    private NotebookService notebookService;
+    private ProductService productService;
 
-    public NotebookController(NotebookService notebookService) {
-        this.notebookService = notebookService;
+    public NotebookController(@Qualifier("notebookService") ProductService productService) {
+        this.productService = productService;
     }
 
     @Operation(summary = "Вывести список всех ноутбуков",
@@ -31,7 +34,7 @@ public class NotebookController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @GetMapping
     public ResponseEntity<List<Notebook>> getAllNotebook() {
-        List<Notebook> result = notebookService.getAllNotebook();
+        List result = productService.getAll();
         return ResponseEntity.ok(result);
     }
 
@@ -46,7 +49,7 @@ public class NotebookController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @GetMapping("/{id}")
     public ResponseEntity<Notebook> getNotebookById(@PathVariable Integer id) {
-        Notebook result = notebookService.getNotebookById(id);
+        Notebook result = (Notebook) productService.getById(id);
         return ResponseEntity.ok(result);
     }
 
@@ -60,7 +63,7 @@ public class NotebookController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PostMapping
     public ResponseEntity<Notebook> addNotebook(@RequestBody Notebook newNotebook) {
-        Notebook result = notebookService.addNotebook(newNotebook);
+        Notebook result = (Notebook) productService.add(newNotebook);
         return ResponseEntity.ok(result);
     }
 
@@ -75,7 +78,7 @@ public class NotebookController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PutMapping("/{id}")
     public ResponseEntity<Notebook> editNotebook(@PathVariable Integer id, @RequestBody Notebook newNotebook) {
-        Notebook result = notebookService.editNotebook(id, newNotebook);
+        Notebook result = (Notebook) productService.edit(id, newNotebook);
         return ResponseEntity.ok(result);
     }
 

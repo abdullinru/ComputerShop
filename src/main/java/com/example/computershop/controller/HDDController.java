@@ -1,12 +1,15 @@
 package com.example.computershop.controller;
 
 import com.example.computershop.model.HDD;
+import com.example.computershop.model.Product;
 import com.example.computershop.service.HDDService;
+import com.example.computershop.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +19,10 @@ import java.util.List;
 @RequestMapping("/hdd")
 public class HDDController {
 
-    private HDDService hddService;
+    private ProductService productService;
 
-    public HDDController(HDDService hddService) {
-        this.hddService = hddService;
+    public HDDController(@Qualifier("HDDService") ProductService productService) {
+        this.productService = productService;
     }
 
     @Operation(summary = "Вывести список всех жестких дисков",
@@ -31,7 +34,7 @@ public class HDDController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @GetMapping
     public ResponseEntity<List<HDD>> getAllHDD() {
-        List<HDD> result = hddService.getAllHDD();
+        List result = productService.getAll();
         return ResponseEntity.ok(result);
     }
 
@@ -46,7 +49,7 @@ public class HDDController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @GetMapping("/{id}")
     public ResponseEntity<HDD> getHDDById(@PathVariable Integer id) {
-        HDD result = hddService.getHDDById(id);
+        HDD result = (HDD) productService.getById(id);
         return ResponseEntity.ok(result);
     }
     @Operation(summary = "Добавить HDD",
@@ -59,7 +62,7 @@ public class HDDController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PostMapping
     public ResponseEntity<HDD> addHDD(@RequestBody HDD newHDD) {
-        HDD result = hddService.addHDD(newHDD);
+        HDD result = (HDD) productService.add(newHDD);
         return ResponseEntity.ok(result);
     }
 
@@ -74,7 +77,7 @@ public class HDDController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PutMapping("/{id}")
     public ResponseEntity<HDD> editHDD(@PathVariable Integer id, @RequestBody HDD newHDD) {
-        HDD result = hddService.editHDD(id, newHDD);
+        HDD result = (HDD) productService.edit(id, newHDD);
         return ResponseEntity.ok(result);
     }
 

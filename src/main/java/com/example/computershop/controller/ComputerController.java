@@ -31,7 +31,7 @@ public class ComputerController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @GetMapping
     public ResponseEntity<List<Computer>> getAllComputers() {
-        List<Computer> result = computerService.getAllComputers();
+        List result = computerService.getAll();
         return ResponseEntity.ok(result);
     }
 
@@ -46,7 +46,7 @@ public class ComputerController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @GetMapping("/{id}")
     public ResponseEntity<Computer> getComputerById(@PathVariable Integer id) {
-        Computer result = computerService.getComputerById(id);
+        Computer result = (Computer) computerService.getById(id);
         return ResponseEntity.ok(result);
     }
     @Operation(summary = "Добавить компьютер",
@@ -59,7 +59,7 @@ public class ComputerController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PostMapping
     public ResponseEntity<Computer> addComputer(@RequestBody Computer newComputer) {
-        Computer result = computerService.addComputer(newComputer);
+        Computer result = (Computer) computerService.add(newComputer);
         return ResponseEntity.ok(result);
     }
 
@@ -74,7 +74,7 @@ public class ComputerController {
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PutMapping("/{id}")
     public ResponseEntity<Computer> editComputer(@PathVariable Integer id, @RequestBody Computer newComputer) {
-        Computer result = computerService.editComputer(id, newComputer);
+        Computer result = (Computer) computerService.edit(id, newComputer);
         return ResponseEntity.ok(result);
     }
 

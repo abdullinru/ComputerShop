@@ -54,18 +54,18 @@ class ComputerServiceTest {
     public void addCompPositiveTest() {
         Mockito.when(computerRepository.save(comp1)).thenReturn(comp1);
         Mockito.when(computerRepository.findAll()).thenReturn(Collections.emptyList());
-        Assertions.assertThat(comp1).isEqualTo(computerService.addComputer(comp1));
+        Assertions.assertThat(comp1).isEqualTo(computerService.add(comp1));
     }
     @Test
     public void addCompPositiveTest2() {
         Mockito.when(computerRepository.save(comp1)).thenReturn(comp1);
         Mockito.when(computerRepository.findAll()).thenReturn(comps);
-        Assertions.assertThat(comp1).isEqualTo(computerService.addComputer(comp1));
+        Assertions.assertThat(comp1).isEqualTo(computerService.add(comp1));
     }
     @Test
     public void addCompNullNegativeTest() {
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(()->computerService.addComputer(null));
+                .isThrownBy(()->computerService.add(null));
     }
 
     // Tests on method editComputer
@@ -73,19 +73,19 @@ class ComputerServiceTest {
     public void editCompPositiveTest() {
         Mockito.when(computerRepository.save(comp1)).thenReturn(comp1);
         Mockito.when(computerRepository.findById(1)).thenReturn(Optional.of(comp1));
-        Assertions.assertThat(comp1).isEqualTo(computerService.editComputer(1, comp1));
+        Assertions.assertThat(comp1).isEqualTo(computerService.edit(1, comp1));
     }
 
     @Test
     public void editCompNullNegativeTest() {
         Assertions.assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(()->computerService.editComputer(1,null));
+                .isThrownBy(()->computerService.edit(1,null));
     }
     @Test
     public void editCompWhenOptionalNullNegativeTest() {
         Mockito.when(computerRepository.findById(1)).thenReturn(Optional.empty());
         Assertions.assertThatExceptionOfType(ProductNotFoundException.class)
-                .isThrownBy(()->computerService.editComputer(1,comp1));
+                .isThrownBy(()->computerService.edit(1,comp1));
     }
 
     // Tests on method findByIdComputer
@@ -93,19 +93,19 @@ class ComputerServiceTest {
     public void findByIdWhenOptionalNullNegativeTest() {
         Mockito.when(computerRepository.findById(1)).thenReturn(Optional.empty());
         Assertions.assertThatExceptionOfType(ProductNotFoundException.class)
-                .isThrownBy(()->computerService.getComputerById(1));
+                .isThrownBy(()->computerService.getById(1));
     }
     @Test
     public void findByIdPositiveTest() {
         Mockito.when(computerRepository.findById(1)).thenReturn(Optional.of(comp1));
-        Assertions.assertThat(comp1).isEqualTo(computerService.getComputerById(1));
+        Assertions.assertThat(comp1).isEqualTo(computerService.getById(1));
     }
 
     // Tests on method findAll
     @Test
     public void findAllPositiveTest() {
         Mockito.when(computerRepository.findAll()).thenReturn(comps);
-        Assertions.assertThat(comps).isEqualTo(computerService.getAllComputers());
+        Assertions.assertThat(comps).isEqualTo(computerService.getAll());
     }
 
 }
