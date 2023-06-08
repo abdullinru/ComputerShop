@@ -1,5 +1,6 @@
 package com.example.computershop.model;
 
+import com.example.computershop.model.enums.FormFactor;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

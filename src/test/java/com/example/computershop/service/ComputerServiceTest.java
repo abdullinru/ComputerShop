@@ -2,7 +2,7 @@ package com.example.computershop.service;
 
 import com.example.computershop.exception.ProductNotFoundException;
 import com.example.computershop.model.Computer;
-import com.example.computershop.model.FormFactor;
+import com.example.computershop.model.enums.FormFactor;
 import com.example.computershop.repository.ComputerRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.computershop.model.FormFactor.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.example.computershop.model.enums.FormFactor.*;
 
 @ExtendWith(MockitoExtension.class)
 class ComputerServiceTest {

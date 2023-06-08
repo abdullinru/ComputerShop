@@ -1,17 +1,17 @@
 package com.example.computershop.controller;
 
 import com.example.computershop.model.Computer;
-import com.example.computershop.model.FormFactor;
+import com.example.computershop.model.enums.FormFactor;
 import com.example.computershop.repository.ComputerRepository;
 import com.example.computershop.service.ComputerService;
-import com.example.computershop.service.ProductService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.computershop.model.FormFactor.*;
+import static com.example.computershop.model.enums.FormFactor.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
