@@ -1,6 +1,8 @@
 package com.example.computershop.service;
 
+import com.example.computershop.dto.ComputerDto;
 import com.example.computershop.exception.ProductNotFoundException;
+import com.example.computershop.mapper.Mapper;
 import com.example.computershop.model.Computer;
 import com.example.computershop.model.enums.FormFactor;
 import com.example.computershop.repository.ComputerRepository;
@@ -12,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +28,8 @@ class ComputerServiceTest {
 
     @Mock
     private ComputerRepository computerRepository;
+    @Mock
+    private Mapper mapper;
 
     @InjectMocks
     private ComputerService computerService;
@@ -32,6 +37,7 @@ class ComputerServiceTest {
     Computer comp1;
     Computer comp2;
     Computer comp3;
+    ComputerDto comp1Dto;
     List<Computer> comps;
     @BeforeEach
     public void setup() {
@@ -45,6 +51,12 @@ class ComputerServiceTest {
         comp1 = new Computer(id1, sn1, manufacturer1, price1, quantity1, type1);
         comp2 = new Computer(id2, sn2, manufacturer2, price2, quantity2, type2);
         comp3 = new Computer(id3, sn3, manufacturer3, price3, quantity3, type3);
+        comp1Dto = new ComputerDto();
+        comp1Dto.setSerNomer(sn1);
+        comp1Dto.setManufacturer(manufacturer1);
+        comp1Dto.setPrice(price1);
+        comp1Dto.setQuantity(quantity1);
+        comp1Dto.setType(type1);
         comps = new ArrayList<>(List.of(comp1, comp2, comp3));
     }
 
@@ -53,13 +65,15 @@ class ComputerServiceTest {
     public void addCompPositiveTest() {
         Mockito.when(computerRepository.save(comp1)).thenReturn(comp1);
         Mockito.when(computerRepository.findAll()).thenReturn(Collections.emptyList());
-        Assertions.assertThat(comp1).isEqualTo(computerService.add(comp1));
+        Mockito.when(mapper.dtoToModel(comp1Dto)).thenReturn(comp1);
+        Assertions.assertThat(comp1).isEqualTo(computerService.add(comp1Dto));
     }
     @Test
     public void addCompPositiveTest2() {
         Mockito.when(computerRepository.save(comp1)).thenReturn(comp1);
         Mockito.when(computerRepository.findAll()).thenReturn(comps);
-        Assertions.assertThat(comp1).isEqualTo(computerService.add(comp1));
+        Mockito.when(mapper.dtoToModel(comp1Dto)).thenReturn(comp1);
+        Assertions.assertThat(comp1).isEqualTo(computerService.add(comp1Dto));
     }
     @Test
     public void addCompNullNegativeTest() {
@@ -72,7 +86,7 @@ class ComputerServiceTest {
     public void editCompPositiveTest() {
         Mockito.when(computerRepository.save(comp1)).thenReturn(comp1);
         Mockito.when(computerRepository.findById(1)).thenReturn(Optional.of(comp1));
-        Assertions.assertThat(comp1).isEqualTo(computerService.edit(1, comp1));
+        Assertions.assertThat(comp1).isEqualTo(computerService.edit(1, comp1Dto));
     }
 
     @Test
@@ -84,7 +98,7 @@ class ComputerServiceTest {
     public void editCompWhenOptionalNullNegativeTest() {
         Mockito.when(computerRepository.findById(1)).thenReturn(Optional.empty());
         Assertions.assertThatExceptionOfType(ProductNotFoundException.class)
-                .isThrownBy(()->computerService.edit(1,comp1));
+                .isThrownBy(()->computerService.edit(1,comp1Dto));
     }
 
     // Tests on method findByIdComputer

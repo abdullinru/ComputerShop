@@ -1,11 +1,14 @@
 package com.example.computershop.service;
 
+import com.example.computershop.dto.NotebookDto;
+import com.example.computershop.dto.ProductDto;
 import com.example.computershop.exception.ProductNotFoundException;
-import com.example.computershop.model.Computer;
+import com.example.computershop.mapper.Mapper;
 import com.example.computershop.model.Notebook;
 import com.example.computershop.model.Product;
 import com.example.computershop.repository.NotebookRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -17,9 +20,11 @@ import java.util.Optional;
 @Service
 public class NotebookService implements ProductService{
     private NotebookRepository notebookRepository;
+    private Mapper mapper;
 
-    public NotebookService(NotebookRepository notebookRepository) {
+    public NotebookService(NotebookRepository notebookRepository, @Qualifier("notebookMapper") Mapper mapper) {
         this.notebookRepository = notebookRepository;
+        this.mapper = mapper;
     }
 
     public List getAll() {
@@ -33,8 +38,8 @@ public class NotebookService implements ProductService{
         return findNotebook.orElseThrow(ProductNotFoundException::new);
     }
 
-    public Notebook add(Product newProduct) {
-        Notebook newNotebook = (Notebook) newProduct;
+    public Notebook add(ProductDto newProduct) {
+        Notebook newNotebook = (Notebook) mapper.dtoToModel(newProduct);
         if (newNotebook == null) {
             throw new IllegalArgumentException("Parametr newNotebook is null");
         }
@@ -54,12 +59,12 @@ public class NotebookService implements ProductService{
     }
 
     @CachePut(value = "notebooks", key = "#id")
-    public Notebook edit(Integer id, Product newProduct) {
+    public Notebook edit(Integer id, ProductDto newProduct) {
         if (newProduct == null) {
             log.error("Переданный параметр - NULL");
             throw new IllegalArgumentException("Parametr newProduct is null");
         }
-        Notebook newNotebook = (Notebook) newProduct;
+        NotebookDto newNotebook = (NotebookDto) newProduct;
         Notebook editNotebook = notebookRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
 

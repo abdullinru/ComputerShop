@@ -1,5 +1,6 @@
 package com.example.computershop.controller;
 
+import com.example.computershop.dto.NotebookDto;
 import com.example.computershop.model.Notebook;
 import com.example.computershop.model.Product;
 import com.example.computershop.service.NotebookService;
@@ -62,7 +63,7 @@ public class NotebookController {
             @ApiResponse(responseCode = "400", description = "badRequest"),
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PostMapping
-    public ResponseEntity<Notebook> addNotebook(@RequestBody Notebook newNotebook) {
+    public ResponseEntity<Notebook> addNotebook(@RequestBody NotebookDto newNotebook) {
         Notebook result = (Notebook) productService.add(newNotebook);
         return ResponseEntity.ok(result);
     }
@@ -77,7 +78,7 @@ public class NotebookController {
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PutMapping("/{id}")
-    public ResponseEntity<Notebook> editNotebook(@PathVariable Integer id, @RequestBody Notebook newNotebook) {
+    public ResponseEntity<Notebook> editNotebook(@PathVariable Integer id, @RequestBody NotebookDto newNotebook) {
         Notebook result = (Notebook) productService.edit(id, newNotebook);
         return ResponseEntity.ok(result);
     }

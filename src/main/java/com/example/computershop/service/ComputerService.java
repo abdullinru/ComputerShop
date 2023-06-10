@@ -1,10 +1,15 @@
 package com.example.computershop.service;
 
+import com.example.computershop.dto.ComputerDto;
+import com.example.computershop.dto.ProductDto;
 import com.example.computershop.exception.ProductNotFoundException;
+import com.example.computershop.mapper.ComputerMapper;
+import com.example.computershop.mapper.Mapper;
 import com.example.computershop.model.Computer;
-import com.example.computershop.model.Product;
 import com.example.computershop.repository.ComputerRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,28 +23,11 @@ public class ComputerService implements ProductService{
 
     private ComputerRepository computerRepository;
 
-    public ComputerService(ComputerRepository computerRepository) {
+    private final ComputerMapper mapper;
+
+    public ComputerService(ComputerRepository computerRepository, ComputerMapper mapper) {
         this.computerRepository = computerRepository;
-    }
-
-    @CachePut(value = "computers", key = "#id")
-    public Computer edit(Integer id, Product newProduct) {
-        if (newProduct == null) {
-            log.error("Переданный параметр - NULL");
-            throw new IllegalArgumentException("Parametr newProduct is null");
-        }
-        Computer newComp = (Computer)newProduct;
-        Computer editComputer = computerRepository.findById(id)
-                .orElseThrow(ProductNotFoundException::new);
-
-        log.info("редактирование компьютера с  id {}, переданные параметры: {} ", id, newProduct);
-        editComputer.setSerNomer(newComp.getSerNomer());
-        editComputer.setManufacturer(newComp.getManufacturer());
-        editComputer.setPrice(newComp.getPrice());
-        editComputer.setQuantity(newComp.getQuantity());
-        editComputer.setType(newComp.getType());
-
-        return computerRepository.save(editComputer);
+        this.mapper = mapper;
     }
 
     public List getAll() {
@@ -53,9 +41,8 @@ public class ComputerService implements ProductService{
         Optional<Computer> findComputer = computerRepository.findById(id);
         return findComputer.orElseThrow(ProductNotFoundException::new);
     }
-
-    public Computer add(Product newProduct) {
-        Computer newComp = (Computer) newProduct;
+    public Computer add(ProductDto newProduct) {
+        Computer newComp = (Computer) mapper.dtoToModel(newProduct);
         if (newComp == null) {
             log.error("Переданный параметр - NULL");
             throw new IllegalArgumentException("Parametr newСomputer is null");
@@ -73,6 +60,26 @@ public class ComputerService implements ProductService{
         Computer computerByIndex = comps.get(index);
         computerByIndex.increase(newComp.getQuantity());
         return computerRepository.save(computerByIndex);
+    }
+
+    @CachePut(value = "computers", key = "#id")
+    public Computer edit(Integer id, ProductDto newProduct) {
+        if (newProduct == null) {
+            log.error("Переданный параметр - NULL");
+            throw new IllegalArgumentException("Parametr newProduct is null");
+        }
+        ComputerDto newComp = (ComputerDto)newProduct;
+        Computer editComputer = computerRepository.findById(id)
+                .orElseThrow(ProductNotFoundException::new);
+
+        log.info("редактирование компьютера с  id {}, переданные параметры: {} ", id, newProduct);
+        editComputer.setSerNomer(newComp.getSerNomer());
+        editComputer.setManufacturer(newComp.getManufacturer());
+        editComputer.setPrice(newComp.getPrice());
+        editComputer.setQuantity(newComp.getQuantity());
+        editComputer.setType(newComp.getType());
+
+        return computerRepository.save(editComputer);
     }
 
 }

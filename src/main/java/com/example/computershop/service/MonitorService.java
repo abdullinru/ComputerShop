@@ -1,12 +1,14 @@
 package com.example.computershop.service;
 
+import com.example.computershop.dto.MonitorDto;
+import com.example.computershop.dto.ProductDto;
 import com.example.computershop.exception.ProductNotFoundException;
-import com.example.computershop.model.Computer;
-import com.example.computershop.model.HDD;
+import com.example.computershop.mapper.Mapper;
 import com.example.computershop.model.Monitor;
 import com.example.computershop.model.Product;
 import com.example.computershop.repository.MonitorRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,11 @@ import java.util.Optional;
 @Service
 public class MonitorService implements ProductService{
     private MonitorRepository monitorRepository;
+    private Mapper mapper;
 
-    public MonitorService(MonitorRepository monitorRepository) {
+    public MonitorService(MonitorRepository monitorRepository, @Qualifier("monitorMapper") Mapper mapper) {
         this.monitorRepository = monitorRepository;
+        this.mapper = mapper;
     }
 
     public List getAll() {
@@ -34,8 +38,8 @@ public class MonitorService implements ProductService{
         return findMonitor.orElseThrow(ProductNotFoundException::new);
     }
 
-    public Monitor add(Product newProduct) {
-        Monitor newMonitor = (Monitor) newProduct;
+    public Monitor add(ProductDto newProduct) {
+        Monitor newMonitor = (Monitor) mapper.dtoToModel(newProduct);
         if (newMonitor == null) {
             throw new IllegalArgumentException("Parametr newMonitor is null");
         }
@@ -55,12 +59,12 @@ public class MonitorService implements ProductService{
     }
 
     @CachePut(value = "monitors", key = "#id")
-    public Monitor edit(Integer id, Product newProduct) {
+    public Monitor edit(Integer id, ProductDto newProduct) {
         if (newProduct == null) {
             log.error("Переданный параметр - NULL");
             throw new IllegalArgumentException("Parametr newProduct is null");
         }
-        Monitor newMonitor = (Monitor) newProduct;
+        MonitorDto newMonitor = (MonitorDto) newProduct;
         Monitor editMonitor = monitorRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
 

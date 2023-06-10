@@ -1,5 +1,6 @@
 package com.example.computershop.controller;
 
+import com.example.computershop.dto.MonitorDto;
 import com.example.computershop.model.HDD;
 import com.example.computershop.model.Monitor;
 import com.example.computershop.model.Product;
@@ -63,7 +64,7 @@ public class MonitorController {
             @ApiResponse(responseCode = "400", description = "badRequest"),
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PostMapping
-    public ResponseEntity<Monitor> addMonitor(@RequestBody Monitor newMonitor) {
+    public ResponseEntity<Monitor> addMonitor(@RequestBody MonitorDto newMonitor) {
         Monitor result = (Monitor) productService.add(newMonitor);
         return ResponseEntity.ok(result);
     }
@@ -78,7 +79,7 @@ public class MonitorController {
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PutMapping("/{id}")
-    public ResponseEntity<Monitor> editMonitor(@PathVariable Integer id, @RequestBody Monitor newMonitor) {
+    public ResponseEntity<Monitor> editMonitor(@PathVariable Integer id, @RequestBody MonitorDto newMonitor) {
         Monitor result = (Monitor) productService.edit(id, newMonitor);
         return ResponseEntity.ok(result);
     }

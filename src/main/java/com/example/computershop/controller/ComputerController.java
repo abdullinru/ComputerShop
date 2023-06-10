@@ -1,5 +1,6 @@
 package com.example.computershop.controller;
 
+import com.example.computershop.dto.ComputerDto;
 import com.example.computershop.model.Computer;
 import com.example.computershop.service.ComputerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,7 +59,7 @@ public class ComputerController {
             @ApiResponse(responseCode = "400", description = "badRequest"),
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PostMapping
-    public ResponseEntity<Computer> addComputer(@RequestBody Computer newComputer) {
+    public ResponseEntity<Computer> addComputer(@RequestBody ComputerDto newComputer) {
         Computer result = (Computer) computerService.add(newComputer);
         return ResponseEntity.ok(result);
     }
@@ -73,7 +74,7 @@ public class ComputerController {
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PutMapping("/{id}")
-    public ResponseEntity<Computer> editComputer(@PathVariable Integer id, @RequestBody Computer newComputer) {
+    public ResponseEntity<Computer> editComputer(@PathVariable Integer id, @RequestBody ComputerDto newComputer) {
         Computer result = (Computer) computerService.edit(id, newComputer);
         return ResponseEntity.ok(result);
     }

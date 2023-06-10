@@ -1,5 +1,6 @@
 package com.example.computershop.controller;
 
+import com.example.computershop.dto.HDDDto;
 import com.example.computershop.model.HDD;
 import com.example.computershop.model.Product;
 import com.example.computershop.service.HDDService;
@@ -61,7 +62,7 @@ public class HDDController {
             @ApiResponse(responseCode = "400", description = "badRequest"),
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PostMapping
-    public ResponseEntity<HDD> addHDD(@RequestBody HDD newHDD) {
+    public ResponseEntity<HDD> addHDD(@RequestBody HDDDto newHDD) {
         HDD result = (HDD) productService.add(newHDD);
         return ResponseEntity.ok(result);
     }
@@ -76,7 +77,7 @@ public class HDDController {
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "error on server")})
     @PutMapping("/{id}")
-    public ResponseEntity<HDD> editHDD(@PathVariable Integer id, @RequestBody HDD newHDD) {
+    public ResponseEntity<HDD> editHDD(@PathVariable Integer id, @RequestBody HDDDto newHDD) {
         HDD result = (HDD) productService.edit(id, newHDD);
         return ResponseEntity.ok(result);
     }

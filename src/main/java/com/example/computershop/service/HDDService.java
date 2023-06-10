@@ -1,11 +1,14 @@
 package com.example.computershop.service;
 
+import com.example.computershop.dto.HDDDto;
+import com.example.computershop.dto.ProductDto;
 import com.example.computershop.exception.ProductNotFoundException;
-import com.example.computershop.model.Computer;
+import com.example.computershop.mapper.Mapper;
 import com.example.computershop.model.HDD;
 import com.example.computershop.model.Product;
 import com.example.computershop.repository.HDDRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -17,9 +20,11 @@ import java.util.Optional;
 @Service
 public class HDDService implements ProductService {
     private HDDRepository hddRepository;
+    private Mapper mapper;
 
-    public HDDService(HDDRepository hddRepository) {
+    public HDDService(HDDRepository hddRepository, @Qualifier("hddMapper") Mapper mapper) {
         this.hddRepository = hddRepository;
+        this.mapper = mapper;
     }
 
     public List getAll() {
@@ -33,8 +38,8 @@ public class HDDService implements ProductService {
         return findHDD.orElseThrow(ProductNotFoundException::new);
     }
 
-    public HDD add(Product newProduct) {
-        HDD newHdd = (HDD) newProduct;
+    public HDD add(ProductDto newProduct) {
+        HDD newHdd = (HDD) mapper.dtoToModel(newProduct);
         if (newHdd == null) {
             throw new IllegalArgumentException("Parametr newHDD is null");
         }
@@ -54,12 +59,12 @@ public class HDDService implements ProductService {
     }
 
     @CachePut(value = "hdds", key = "#id")
-    public HDD edit(Integer id, Product newProduct) {
+    public HDD edit(Integer id, ProductDto newProduct) {
         if (newProduct == null) {
             log.error("Переданный параметр - NULL");
             throw new IllegalArgumentException("Parametr newProduct is null");
         }
-        HDD newHdd = (HDD) newProduct;
+        HDDDto newHdd = (HDDDto) newProduct;
         HDD editHDD = hddRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
 

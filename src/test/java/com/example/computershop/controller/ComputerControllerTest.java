@@ -1,5 +1,7 @@
 package com.example.computershop.controller;
 
+import com.example.computershop.dto.ComputerDto;
+import com.example.computershop.mapper.Mapper;
 import com.example.computershop.model.Computer;
 import com.example.computershop.model.enums.FormFactor;
 import com.example.computershop.repository.ComputerRepository;
@@ -43,6 +45,8 @@ class ComputerControllerTest {
 
     @MockBean
     private ComputerRepository computerRepository;
+    @MockBean
+    private Mapper mapper;
 
     @InjectMocks
     private ComputerController computerController;
@@ -51,6 +55,7 @@ class ComputerControllerTest {
     Computer comp1;
     Computer comp2;
     Computer comp3;
+    ComputerDto comp2dto;
     List<Computer> comps;
     int id1, id2, id3;
     int sn1, sn2, sn3;
@@ -82,6 +87,12 @@ class ComputerControllerTest {
         comp1 = new Computer(id1, sn1, manufacturer1, price1, quantity1, type1);
         comp2 = new Computer(id2, sn2, manufacturer2, price2, quantity2, type2);
         comp3 = new Computer(id3, sn3, manufacturer3, price3, quantity3, type3);
+        comp2dto = new ComputerDto();
+        comp2dto.setSerNomer(sn2);
+        comp2dto.setManufacturer(manufacturer2);
+        comp2dto.setPrice(price2);
+        comp2dto.setQuantity(quantity2);
+        comp2dto.setType(type2);
         comps = new ArrayList<>(List.of(comp1, comp2));
     }
 
@@ -201,6 +212,7 @@ class ComputerControllerTest {
         String jsonComp = objectMapper.writeValueAsString(comp2);
         Mockito.when(computerRepository.findAll()).thenReturn(Collections.emptyList());
         Mockito.when(computerRepository.save(comp2)).thenReturn(comp2);
+        Mockito.when(mapper.dtoToModel(comp2dto)).thenReturn(comp2);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/computer")
@@ -221,6 +233,7 @@ class ComputerControllerTest {
         String jsonComp = objectMapper.writeValueAsString(comp2);
         Mockito.when(computerRepository.findAll()).thenReturn(comps);
         Mockito.when(computerRepository.save(comp2)).thenReturn(comp2);
+        Mockito.when(mapper.dtoToModel(comp2dto)).thenReturn(comp2);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/computer")
