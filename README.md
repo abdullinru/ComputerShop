@@ -10,10 +10,10 @@
 
 P.S. планирую провести рефакторинг кода. 
 
-Описание проекта
-Необходимо вести учет товара на складе магазина (Добавлять, изменять,...)
+Описание проекта <br>
+Необходимо вести учет товара на складе магазина (Добавлять, изменять,...)<br>
 
-Стек технологий
-В проекте используются:
-Backend: Java 17, Maven, Spring Framework, Spring Boot, Spring JPA, GIT
-BD: PostgreSQL, Liquibase
+Стек технологий<br>
+В проекте используются:<br>
+Backend: Java 17, Maven, Spring Framework, Spring Boot, Spring JPA, GIT<br>
+BD: PostgreSQL, Liquibase<br>
